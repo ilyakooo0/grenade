@@ -30,6 +30,7 @@ import           Grenade.Layers.Internal.Pad
 
 import           Numeric.LinearAlgebra (konst, subMatrix, diagBlock)
 import           Numeric.LinearAlgebra.Static (extract, create)
+import           Control.DeepSeq
 
 -- | A padding layer for a neural network.
 --
@@ -39,6 +40,9 @@ data Pad  :: Nat
           -> Nat
           -> Nat -> Type where
   Pad  :: Pad padLeft padTop padRight padBottom
+
+instance NFData (Pad padLeft padTop padRight padBottom) where
+  rnf Pad = ()
 
 instance Show (Pad padLeft padTop padRight padBottom) where
   show Pad = "Pad"

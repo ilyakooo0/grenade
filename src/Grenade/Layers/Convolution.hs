@@ -39,6 +39,7 @@ import           Numeric.LinearAlgebra.Static hiding ((|||), build, toRows)
 import           Grenade.Core
 import           Grenade.Layers.Internal.Convolution
 import           Grenade.Layers.Internal.Update
+import           Control.DeepSeq
 
 -- | A convolution layer for a neural network.
 --   This uses the im2col convolution trick popularised by Caffe, which essentially turns the
@@ -105,6 +106,9 @@ instance Show (Convolution c f k k' s s') where
 
             px = (fmap . fmap . fmap) render ms
         in unlines $ foldl1 (zipWith (\a' b' -> a' ++ "   |   " ++ b')) $ px
+
+instance NFData (Convolution c f k k' s s') where
+  rnf (Convolution a b) = rnf a `deepseq` rnf b `deepseq` ()
 
 randomConvolution :: ( MonadRandom m
                      , KnownNat channels
